@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using ECommerce.Api.Products.Interfaces;
+using ECommerce.Api.Products.Providers;
+using AutoMapper;
 
 namespace ECommerce.Api.Products
 {
@@ -27,6 +30,8 @@ namespace ECommerce.Api.Products
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IProductsProvider, ProductProvider>();
+            services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<ProductsDbContext>(options =>
             {
                 options.UseInMemoryDatabase("Products");
