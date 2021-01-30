@@ -26,30 +26,12 @@ namespace ECommerce.Api.Orders.Providers
             SeedData();
         }
 
-        public async Task<(bool IsSuccess, Models.Order Order, string ErrorMessage)> GetOrderAsyc(int id)
+        public async Task<(bool IsSuccess, IEnumerable<Models.Order> Orders, string ErrorMessage)> GetOrdersAsyc(int customerId)
         {
             try
             {
-                var order = await dbContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
-                if (order != null)
-                {
-                    var result = mapper.Map<DB.Order,Models.Order>(order);
-                    return (true, result, null);
-                }
-                return (false, null, "Not found");
-            }
-            catch (Exception ex)
-            {
-                logger?.LogError(ex.ToString());
-                return (false, null, ex.ToString());
-            }
-        }
-
-        public async Task<(bool IsSuccess, IEnumerable<Models.Order> Orders, string ErrorMessage)> GetOrdersAsyc()
-        {
-            try
-            {
-                var orders = await dbContext.Orders.ToListAsync();
+                var orders = await dbContext.Orders
+                    .Where(o => o.CustomerId == customerId).ToListAsync();
                 if (orders != null && orders.Any())
                 {
                     var results = mapper.Map<IEnumerable<DB.Order>, IEnumerable<Models.Order>>(orders);
@@ -68,13 +50,52 @@ namespace ECommerce.Api.Orders.Providers
         {
             if (!dbContext.Orders.Any())
             {
-                dbContext.Orders.Add(new DB.Order() { Id = 1  });
-                dbContext.Orders.Add(new DB.Order() { Id = 2,  });
-                dbContext.Orders.Add(new DB.Order() { Id = 3,  });
-                dbContext.Orders.Add(new DB.Order() { Id = 4,  });
+                dbContext.Orders.Add(new DB.Order()
+                {
+                    Id = 1,
+                    CustomerId = 1,
+                    OrderDate = DateTime.Now,
+                    Items = new List<DB.OrderItem>()
+                    {
+                        new DB.OrderItem() { OrderId = 1, ProductId = 1, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 1, ProductId = 2, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 1, ProductId = 3, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 2, ProductId = 2, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 3, ProductId = 3, Quantity = 1, UnitPrice = 100 }
+                    },
+                    Total = 100
+                });
+                dbContext.Orders.Add(new DB.Order()
+                {
+                    Id = 2,
+                    CustomerId = 1,
+                    OrderDate = DateTime.Now.AddDays(-1),
+                    Items = new List<DB.OrderItem>()
+                    {
+                        new DB.OrderItem() { OrderId = 1, ProductId = 1, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 1, ProductId = 2, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 1, ProductId = 3, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 2, ProductId = 2, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 3, ProductId = 3, Quantity = 1, UnitPrice = 100 }
+                    },
+                    Total = 100
+                });
+                dbContext.Orders.Add(new DB.Order()
+                {
+                    Id = 3,
+                    CustomerId = 2,
+                    OrderDate = DateTime.Now,
+                    Items = new List<DB.OrderItem>()
+                    {
+                        new DB.OrderItem() { OrderId = 1, ProductId = 1, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 2, ProductId = 2, Quantity = 10, UnitPrice = 10 },
+                        new DB.OrderItem() { OrderId = 3, ProductId = 3, Quantity = 1, UnitPrice = 100 }
+                    },
+                    Total = 100
+                });
                 dbContext.SaveChanges();
             }
-        }
 
+        }
     }
 }

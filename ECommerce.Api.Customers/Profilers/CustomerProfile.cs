@@ -9,7 +9,7 @@ namespace ECommerce.Api.Customers.Profilers
     { 
         public CustomerProfile()
         {
-            CreateMap<DB.Custumer, Models.Customer>();
+            CreateMap<DB.Customer, Models.Customer>();
         }
     }
 }

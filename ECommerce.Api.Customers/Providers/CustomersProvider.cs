@@ -32,7 +32,7 @@ namespace ECommerce.Api.Customers.Providers
                 var customer = await dbContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
                 if (customer != null)
                 {
-                    var result = mapper.Map<DB.Custumer, Models.Customer>(customer);
+                    var result = mapper.Map<DB.Customer, Models.Customer>(customer);
                     return (true, result, null);
                 }
                 return (false, null, "Not found");
@@ -52,7 +52,7 @@ namespace ECommerce.Api.Customers.Providers
                 var customers = await dbContext.Customers.ToListAsync();
                 if (customers != null && customers.Any())
                 {
-                    var result = mapper.Map<IEnumerable<DB.Custumer>, IEnumerable<Models.Customer>>(customers);
+                    var result = mapper.Map<IEnumerable<DB.Customer>, IEnumerable<Models.Customer>>(customers);
                     return (true, result, null);
                 }
                 return (false, null, "Not found");
@@ -68,10 +68,10 @@ namespace ECommerce.Api.Customers.Providers
         {
             if (!dbContext.Customers.Any())
             {
-                dbContext.Customers.Add(new DB.Custumer() { Id = 1 });
-                dbContext.Customers.Add(new DB.Custumer() { Id = 2, });
-                dbContext.Customers.Add(new DB.Custumer() { Id = 3, });
-                dbContext.Customers.Add(new DB.Custumer() { Id = 4, });
+                dbContext.Customers.Add(new DB.Customer() { Id = 1, Name = "Jessica Smith", Address = "20 Elm St." });
+                dbContext.Customers.Add(new DB.Customer() { Id = 2, Name = "John Smith", Address = "30 Main St." });
+                dbContext.Customers.Add(new DB.Customer() { Id = 3, Name = "William Johnson", Address = "100 10th St." });
+
                 dbContext.SaveChanges();
             }
         }

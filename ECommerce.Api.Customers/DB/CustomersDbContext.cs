@@ -8,7 +8,7 @@ namespace ECommerce.Api.Customers.DB
 {
     public class CustomersDbContext : DbContext
     {
-        public DbSet<Custumer> Customers { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public CustomersDbContext(DbContextOptions option)
             : base(option)
         {
