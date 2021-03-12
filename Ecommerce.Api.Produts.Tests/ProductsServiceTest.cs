@@ -95,5 +95,7 @@ namespace Ecommerce.Api.Produts.Tests
                 dbContext.SaveChanges();
             }
         }
+
+        // some note for dockers 
     }
 }
