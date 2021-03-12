@@ -95,5 +95,6 @@ namespace Ecommerce.Api.Produts.Tests
                 dbContext.SaveChanges();
             }
         }
+        // in master without docker
     }
 }
